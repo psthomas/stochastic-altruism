@@ -8,6 +8,8 @@ Created on Wed Aug 24 20:16:53 2016
 import numpy as np
 
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
+
 #import matplotlib.patches as mpatches
 #from matplotlib.patches import Ellipse
 plt.style.use('ggplot')
@@ -110,10 +112,14 @@ if __name__ == '__main__':
     vt = v[hull.vertices][it]
     rt = r[hull.vertices][it]
     xt = x[hull.vertices][it]
+
+    #https://stackoverflow.com/questions/4700614
+    fontP = FontProperties()
+    fontP.set_size('small')
     
     #plt.rc('axes', prop_cycle=(cycler('color', colors)))
     
-    plt.figure(0, figsize=(8, 6))
+    plt.figure(0, figsize=(10, 7))
     plt.axis([0.0, np.max(s)*1.1, 0.0, np.max(p)*1.1])
     #plt.axis([0.0, 10.0, 0.0, np.max(p)*1.1])
     plt.plot(v, r, '.', color='k', alpha=0.01)
@@ -124,18 +130,29 @@ if __name__ == '__main__':
         c = charities[j]
         plt.plot(s[j], p[j], 'o', label=c, color=colors[c], markersize=10)
     
-    plt.legend(loc='best', ncol=3, numpoints=1)
+    #plt.legend(loc='best', ncol=3, numpoints=1)
+    # Shrink current axis for larger legend
+    ax = plt.subplot(111)
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width * 0.77, box.height])   
+    plt.legend(numpoints=1, loc='center left', bbox_to_anchor=(1, 0.5), prop=fontP) 
     plt.title('Charity portfolios')
     plt.xlabel('Downside risk')
     plt.ylabel('Cost effectiveness')
     
-    plt.figure(1, figsize=(8, 6))
+    plt.figure(1, figsize=(10, 7))
     plt.axis('equal')
     patches, texts = plt.pie(xm, startangle=90, colors=[colors[o] for o in charities])
-    plt.legend(patches, labels=['{} ({:2.1%})'.format(charities[i], xm[i]) for i in range(n)], loc='best')
+    #plt.legend(patches, labels=['{} ({:2.1%})'.format(charities[i], xm[i]) for i in range(n)], loc='best')
+    # Shrink current axis for legend
+    ax = plt.subplot(111)
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width * 0.77, box.height])
+    labels=['{} ({:2.1%})'.format(charities[i], xm[i]) for i in range(n)] #Eliminates runtime warning
+    plt.legend(patches, labels, loc='center left', bbox_to_anchor=(1, 0.5), prop=fontP)
     plt.title('Minimum variance portfolio')
     
-    plt.figure(2, figsize=(8, 6))
+    plt.figure(2, figsize=(10, 7))
     x = np.linspace(0.0, 25.0, 100)
     for c in charities:
         yh, xh = np.histogram(data[c], bins=x, density=True)    
@@ -145,7 +162,12 @@ if __name__ == '__main__':
     plt.xlabel('Cost effectiveness')
     plt.ylabel('Probability')
     plt.title('PDF of cost effectiveness')
-    plt.legend(loc='best')
+    #plt.legend(loc='best')
+    # Shrink current axis for legend
+    ax = plt.subplot(111)
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width * 0.77, box.height])
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), prop=fontP)
     
     '''
     nf = 5

@@ -87,3 +87,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Generated Files
+lead_params.json
+*.pickle
